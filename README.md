@@ -1,42 +1,52 @@
-# Advanced Sample Hardhat Project
+# Proxy storage
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+## Specifications
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+- Uses [Transparent Proxy](https://blog.openzeppelin.com/the-transparent-proxy-pattern/) for upgradeability.
+- Uses [OwnableUpgradeable](https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/blob/master/contracts/access/OwnableUpgradeable.sol) for ownership management.
+- Uses [IERC20](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol) for ERC20 token operations.
 
-Try running some of the following tasks:
+## Deployed contracts (Rinkeby)
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.js
-node scripts/deploy.js
-npx eslint '**/*.js'
-npx eslint '**/*.js' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
-```
+Contract | Address
+--- | ---
+StorageLogic | [0xB79221BfEb28344352e364Be0d5BD9d58c790B95](https://rinkeby.etherscan.io/address/0xb79221bfeb28344352e364be0d5bd9d58c790b95)  
+ProxyAdmin | [0x71E31031E76c07db971BA2E7D457cDc4837FE9EE](https://rinkeby.etherscan.io/address/0x71e31031e76c07db971ba2e7d457cdc4837fe9ee)
+TransparentUpgradeableProxy | [0xD7C7b723Ac4fCF06234B25792467f7D3Ba67F2CC](https://rinkeby.etherscan.io/address/0xd7c7b723ac4fcf06234b25792467f7d3ba67f2cc)
 
-# Etherscan verification
-
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
-
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+## Building & compiling
 
 ```shell
-hardhat run --network ropsten scripts/deploy.js
+yarn waffle && compile
 ```
 
+## Running tests
+
+```shell
+yarn test
+```
+
+## Rinkeby deployment
+
+You should specify your `PRIVATE_KEY` and `RINKEBY_URL` env variable
+
+```shell
+yarn hardhat run --network rinkeby scripts/deploy-storage.js
+```
+
+## Upgrades
+
+You should specify your `PRIVATE_KEY` and `RINKEBY_URL` env variable and have a contract deployed with Proxy.
+
+```shell
+yarn hardhat run --network rinkeby scripts/upgrade-storage.js
+```
+
+## Etherscan verification
+
+You should specify your `ETHERSCAN_API_KEY` env variable.
 Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
 
 ```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
+yarn hardhat verify --network rinkeby DEPLOYED_CONTRACT_ADDRESS
 ```
